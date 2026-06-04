@@ -56,4 +56,31 @@ describe('API Endpoints', () => {
             expect(res.status).toBe(400)
         })
     })
+
+    // 4. Tests para POST /agrega_todo
+    describe('POST /agrega_todo', () => {
+
+        it('Debería agregar un todo correctamente (Status 201)', async () => {
+            const res = await app.request('/agrega_todo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ todo: 'Estudiar para el examen de moviles' }),
+            })
+
+            expect(res.status).toBe(201)
+            const json = await res.json()
+            expect(json).toHaveProperty('message', 'Todo agregado exitosamente')
+            expect(json).toHaveProperty('id')
+        })
+
+        it('Debería fallar si no se envía el campo "todo" (Status 400)', async () => {
+            const res = await app.request('/agrega_todo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({}),
+            })
+
+            expect(res.status).toBe(400)
+        })
+    })
 })
