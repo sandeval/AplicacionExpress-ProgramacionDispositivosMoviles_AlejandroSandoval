@@ -23,6 +23,16 @@ app.post('/login', async (c) => {
     return c.json({ status: 'ok' })
 })
 
+app.get('/todos', (c) => {
+    try {
+        // Consulta SELECT que devuelve todas las tareas ordenadas por id
+        const todos = db.query('SELECT * FROM todos ORDER BY id ASC').all()
+        return c.json(todos)
+    } catch (err) {
+        return c.json({ error: err.message }, 500)
+    }
+})
+
 app.post('/agrega_todo', async (c) => {
     let body
     try {

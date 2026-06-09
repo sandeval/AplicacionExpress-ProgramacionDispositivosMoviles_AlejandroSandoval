@@ -18,6 +18,28 @@ describe('API Endpoints', () => {
         })
     })
 
+    // 1.b Test para GET /todos
+    describe('GET /todos', () => {
+        it('Debería retornar status 200 y un arreglo (lista de tareas)', async () => {
+            // Insertamos una tarea para asegurar que la lista no esté vacía
+            await app.request('/agrega_todo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ todo: 'Tarea de prueba para listar' }),
+            })
+
+            const res = await app.request('/todos')
+            expect(res.status).toBe(200)
+
+            const lista = await res.json()
+            expect(Array.isArray(lista)).toBe(true)
+            expect(lista.length).toBeGreaterThan(0)
+            expect(lista[0]).toHaveProperty('id')
+            expect(lista[0]).toHaveProperty('todo')
+            expect(lista[0]).toHaveProperty('created_at')
+        })
+    })
+
     // 2. Test para POST /login
     describe('POST /login', () => {
         it('Debería retornar status 200 al hacer login', async () => {
