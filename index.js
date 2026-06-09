@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 import { Database } from 'bun:sqlite'
 
 // Abre la base de datos
@@ -10,6 +11,9 @@ db.run(`CREATE TABLE IF NOT EXISTS todos (
 )`)
 
 const app = new Hono()
+
+// Habilita CORS para que la app de Expo/Snack (web y móvil) pueda llamar al API
+app.use('/*', cors())
 
 app.get('/', (c) => {
     return c.json({ status: 'ok' })
