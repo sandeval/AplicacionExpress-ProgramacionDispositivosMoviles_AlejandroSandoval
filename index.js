@@ -19,6 +19,29 @@ app.post('/login', async (c) => {
     return c.json({ status: 'ok' })
 })
 
+app.post('/agrega_todo', async (c) => {
+    let body
+    try {
+        body = await c.req.json()
+    } catch {
+        return c.json({ error: 'Falta información necesaria' }, 400)
+    }
+
+    const { todo } = body
+
+    if (!todo) {
+        return c.json({ error: 'Falta información necesaria' }, 400)
+    }
+
+    try {
+        const stmt = db.prepare('INSERT INTO todos (todo) VALUES (?)')
+        const result = stmt.run(todo)
+        return c.json({ id: Number(result.lastInsertRowid), message: 'Todo agregado exitosamente' }, 201)
+    } catch (err) {
+        return c.json({ error: err.message }, 500)
+    }
+})
+
 app.post('/insert', async (c) => {
     let body
     try {
