@@ -1,0 +1,5 @@
+node_modules
+base.sqlite3
+.git
+.github
+assets
